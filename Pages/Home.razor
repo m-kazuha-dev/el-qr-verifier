@@ -1,0 +1,86 @@
+﻿@page "/"
+@using ElQrVerifier.Web.Services
+
+<PageTitle>地方税統一QRコード検証ツール</PageTitle>
+
+<div class="container mt-4" style="max-width: 800px;">
+    <h3>地方税統一QRコード (eL-QR) 検証ツール</h3>
+    <p class="text-muted">255桁のQRコード電文を入力し、各チェックディジットと主要項目の整合性を即座に検証します。</p>
+
+    <div class="mb-3">
+        <label class="form-label font-weight-bold">QRコード電文 (255桁):</label>
+        <textarea class="form-control font-monospace" rows="4" @bind="inputData" placeholder="ここに255桁の文字列を貼り付け..."></textarea>
+    </div>
+
+    <button class="btn btn-primary" @onclick="OnVerifyClicked">検証を実行する</button>
+
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <div class="alert alert-danger mt-3">@errorMessage</div>
+    }
+
+    @if (result != null)
+    {
+        <div class="card mt-4 shadow-sm">
+            <div class="card-header bg-success text-white">
+                <strong>検証結果：@(result.IsSuccess ? "正常（すべてのチェックディジットが一致）" : "エラー（不一致あり）")</strong>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr>
+                            <th style="width: 30%;">納付額</th>
+                            <td>@result.PaymentAmount 円</td>
+                        </tr>
+                        <tr>
+                            <th>納期限</th>
+                            <td>@result.DueDate</td>
+                        </tr>
+                        <tr>
+                            <th>CD1 (MPN)</th>
+                            <td>
+                                読み取り: <code>@result.ActualCd1</code> / 計算値: <code>@result.ExpectedCd1</code>
+                                <span class="badge @(result.IsCd1Valid ? "bg-success" : "bg-danger") ms-2">@(result.IsCd1Valid ? "一致" : "不一致")</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>CD2 (MPN)</th>
+                            <td>
+                                読み取り: <code>@result.ActualCd2</code> / 計算値: <code>@result.ExpectedCd2</code>
+                                <span class="badge @(result.IsCd2Valid ? "bg-success" : "bg-danger") ms-2">@(result.IsCd2Valid ? "一致" : "不一致")</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>CD3 (CRC-16)</th>
+                            <td>
+                                読み取り: <code>@result.ActualCd3</code> / 計算値: <code>@result.ExpectedCd3</code>
+                                <span class="badge @(result.IsCd3Valid ? "bg-success" : "bg-danger") ms-2">@(result.IsCd3Valid ? "一致" : "不一致")</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private string inputData = "";
+    private string errorMessage = "";
+    private ElQrVerificationResult? result;
+
+    private void OnVerifyClicked()
+    {
+        errorMessage = "";
+        result = null;
+
+        try
+        {
+            result = ElQrValidator.ParseAndVerify(inputData.Trim());
+        }
+        catch (Exception ex)
+        {
+            errorMessage = ex.Message;
+        }
+    }
+}
