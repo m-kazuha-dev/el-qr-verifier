@@ -1,2 +1,6 @@
-wwwroot/** linguist-vendored
-*.razor linguist-detectable=true linguist-language=C#
+*.js linguist-vendored=true
+*.css linguist-vendored=true
+*.html linguist-vendored=true
+wwwroot/** linguist-vendored=true
+*.razor linguist-language=C#
+*.cs linguist-language=C#
