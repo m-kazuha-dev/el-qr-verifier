@@ -1,0 +1,2 @@
+wwwroot/** linguist-vendored
+*.razor linguist-detectable=true linguist-language=C#
