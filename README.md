@@ -77,8 +77,8 @@
 
 1. **リポジトリのクローン**
 ```bash
-git clone [https://github.com/m-kazuha-dev/el-qr-verifier.git](https://github.com/m-kazuha-dev/el-qr-verifier.git)
-cd el-qr-verifier/ElQrVerifier.Web
+git clone https://github.com/m-kazuha-dev/el-qr-verifier.git
+cd el-qr-verifier
 ```
 
 2. **アプリケーションの起動**
