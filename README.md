@@ -75,6 +75,10 @@
 
 ## ローカル実行手順
 
+* 前提条件
+  * .NET 8 SDK がインストールされていること
+  * Git が利用可能であること
+
 1. **リポジトリのクローン**
 ```bash
 git clone https://github.com/m-kazuha-dev/el-qr-verifier.git
